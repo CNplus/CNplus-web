@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'; import { site } from '../config/site';
+---
+<BaseLayout title="CNplus — 用中文表达程序">
+<section><p>CNplus v{site.version}</p><h1>用中文表达程序</h1><p>从熟悉的中文开始理解程序，再走进完整的编程语言实现。</p><a href={site.links.quickStart}>快速开始</a><pre><code>设 单价 = 15
+设 数量 = 4
+打印("总价：" + 文本(单价 * 数量) + " 元")</code></pre></section>
+<section><p>01 · 语言前端</p><h2>不是关键词替换</h2><p>CNplus 拥有自己的 lexer、parser 与 AST，先理解源代码，再交给后端。</p></section>
+<section><p>02 · 执行路径</p><h2>后端可以替换</h2><p>架构采用可插拔后端；当前使用 Python 转译后端。运行环境需要 Python 3.11+。</p></section>
+<section><p>03 · 开放协作</p><h2>读代码，也参与代码</h2><p>项目采用 Apache-2.0 许可证。</p><a href="/learn/">了解语言</a><a href="/roadmap/">查看路线</a></section>
+</BaseLayout>
