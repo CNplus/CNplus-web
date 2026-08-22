@@ -62,3 +62,10 @@ test('首屏中文标题保持平衡，主操作不会拉成整栏', async () =>
   assert.ok(inlineCss[1].includes('white-space:normal'));
   assert.ok(inlineCss[1].includes('width:fit-content'));
 });
+
+test('使用官方标志，同时保留小尺寸专用 favicon', async () => {
+  const html = await readPage();
+  assert.match(html, /<img[^>]+src="\/cnplus-logo-96\.jpg"[^>]+width="48"[^>]+height="48"/);
+  assert.match(html, /<meta[^>]+property="og:image"[^>]+content="https:\/\/cnplus\.org\/cnplus-logo-640\.jpg"/);
+  assert.match(html, /<link[^>]+href="\/favicon\.svg"/);
+});

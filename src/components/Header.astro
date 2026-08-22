@@ -3,7 +3,7 @@ import { navigation } from '../config/site';
 ---
 <header class="site-header">
   <div class="shell nav-shell">
-    <a class="brand" href="/" aria-label="CNplus 首页"><svg aria-hidden="true" viewBox="0 0 36 36"><path d="M5 5h26v26H5z"/><path d="M11 12h14M11 18h10M11 24h14"/></svg><span>CNplus</span></a>
+    <a class="brand" href="/" aria-label="CNplus 首页"><img src="/cnplus-logo-96.jpg" alt="" width="48" height="48" decoding="async" /><span>CNplus</span></a>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" data-menu-toggle><span class="sr-only">打开主导航</span><span aria-hidden="true">菜单</span></button>
     <nav id="primary-nav" class="primary-nav" aria-label="主导航" data-menu>{navigation.map(([label, href]) => <a href={href}>{label}</a>)}</nav>
   </div>
