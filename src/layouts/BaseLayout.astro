@@ -1,5 +1,5 @@
 ---
-import Header from '../components/Header.astro'; import Footer from '../components/Footer.astro'; import '../styles/global.css'; import { site } from '../config/site';
+import Header from '../components/Header.astro'; import Footer from '../components/Footer.astro'; import '../styles/global.css'; import '../styles/refresh.css'; import { site } from '../config/site';
 interface Props { title: string; description?: string; }
 const { title, description = 'CNplus 是用中文表达程序的编程语言项目。' } = Astro.props;
 const canonical = new URL(Astro.url.pathname, site.url).toString();

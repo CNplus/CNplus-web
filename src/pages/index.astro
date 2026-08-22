@@ -1,11 +1,82 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'; import { site } from '../config/site';
 ---
-<BaseLayout title="CNplus — 用中文表达程序">
-<section><p>CNplus v{site.version}</p><h1>用中文表达程序</h1><p>从熟悉的中文开始理解程序，再走进完整的编程语言实现。</p><a href={site.links.quickStart}>快速开始</a><pre><code>设 单价 = 15
-设 数量 = 4
-打印("总价：" + 文本(单价 * 数量) + " 元")</code></pre></section>
-<section><p>01 · 语言前端</p><h2>不是关键词替换</h2><p>CNplus 拥有自己的 lexer、parser 与 AST，先理解源代码，再交给后端。</p></section>
-<section><p>02 · 执行路径</p><h2>后端可以替换</h2><p>架构采用可插拔后端；当前使用 Python 转译后端。运行环境需要 Python 3.11+。</p></section>
-<section><p>03 · 开放协作</p><h2>读代码，也参与代码</h2><p>项目采用 Apache-2.0 许可证。</p><a href="/learn/">了解语言</a><a href="/roadmap/">查看路线</a></section>
+<BaseLayout title="CNplus — 让中文成为编程的第一语言" description="CNplus 是认真为中文表达习惯设计的编程语言：自然的中文语序、说人话的错误信息、自有编译器前端与可插拔后端。">
+<section class="hero-v2">
+  <div class="hero-logo-wrap">
+    <img class="hero-logo" src="/cnplus-logo-640.jpg" alt="CNplus 标志" width="176" height="176" fetchpriority="high" />
+  </div>
+  <p class="hero-wordmark">CNplus · 中文编程语言</p>
+  <h1>让中文，成为编程的第一语言</h1>
+  <p class="hero-lead"><strong>不是把英文关键词换成中文。</strong>CNplus 从中文母语者真正会说的话出发，认真设计语法、错误信息和编译器，让第一次写程序的人少翻译一层，让熟悉编程的人看到另一种可能。</p>
+  <div class="hero-actions">
+    <a class="primary-action" href={site.links.quickStart}>十分钟写出第一个程序</a>
+    <a class="secondary-action" href="#why-cnplus">看看它哪里不一样</a>
+  </div>
+  <p class="hero-meta"><span>v{site.version}</span><span>Python 3.11+</span><span>Apache-2.0</span><span>自有 AST</span></p>
+  <div class="hero-proof" aria-label="CNplus 代码示例">
+    <div class="proof-bar"><span>你好.cnp</span><span class="proof-dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+    <pre><code><span class="code-keyword">设</span> <span class="code-name">单价</span> = 15
+<span class="code-keyword">设</span> <span class="code-name">数量</span> = 4
+打印(<span class="code-string">"总价："</span> + 文本(单价 * 数量) + <span class="code-string">" 元"</span>)
+
+<span class="code-comment"># 总价：60 元</span></code></pre>
+  </div>
+</section>
+
+<section class="story-intro" id="why-cnplus">
+  <p class="section-kicker">WHY CNPLUS</p>
+  <h2>第一眼觉得新奇，写下去才发现顺手</h2>
+  <p>中文不该只是代码里的变量名。语序、提示、思考方式，都可以真正从中文出发。</p>
+</section>
+
+<section class="benefit-row">
+  <div class="benefit-copy">
+    <span class="benefit-number">01 · 自然表达</span>
+    <h2>顺着中文的习惯写</h2>
+    <p>不照搬英文语序，也不拿生硬术语为难新手。遍历一份成绩，就写“遍历成绩，每个名字”——先把意思说清楚，再让机器执行。</p>
+  </div>
+  <div class="benefit-demo">
+    <p class="demo-label">CNPLUS / READ IT ALOUD</p>
+    <div class="natural-code">
+      <span><strong>遍历</strong> 成绩 <strong>每个</strong> 名字</span>
+      <span>&nbsp;&nbsp;&nbsp;&nbsp;打印(名字, 成绩[名字])</span>
+    </div>
+  </div>
+</section>
+
+<section class="benefit-row reverse">
+  <div class="benefit-copy">
+    <span class="benefit-number">02 · 友好诊断</span>
+    <h2>错误信息会说人话</h2>
+    <p>报错不只告诉你一个术语，还会用大白话解释发生了什么，并尽量给出能直接照着改的建议。工具应该帮助学习，而不是证明自己高深。</p>
+  </div>
+  <div class="benefit-demo">
+    <p class="demo-label">ERROR / EXPLAIN / FIX</p>
+    <div class="error-sample"><strong>错误[CN0302]</strong>：变量 年龄x 还没有声明过<br />也就是说：CNplus 不认识这个名字<br />这样改：是不是想写「年龄」？</div>
+  </div>
+</section>
+
+<section class="benefit-row">
+  <div class="benefit-copy">
+    <span class="benefit-number">03 · 现在能用，未来能长</span>
+    <h2>借用 Python 生态，但不困在 Python 里</h2>
+    <p>当前 Python 转译后端可以直接借用成熟的 pip 库；与此同时，CNplus 有自己的 lexer、parser 和 AST，后端接口早已留好，未来可以走向 VM、JS 或更多目标。</p>
+  </div>
+  <div class="benefit-demo">
+    <p class="demo-label">TODAY / TOMORROW</p>
+    <div class="ecosystem-split">
+      <div><strong>今天就能借</strong><span>文件、网络、数据处理……需要时直接借用 Python 库。</span></div>
+      <div><strong>明天还能换</strong><span>语言前端保持稳定，执行后端可以继续生长。</span></div>
+    </div>
+    <div class="architecture-path"><span>源码</span><b>→</b><span>自有 AST</span><b>→</b><span>Python / VM / JS</span></div>
+  </div>
+</section>
+
+<section class="final-cta">
+  <p class="section-kicker">START SMALL, BUILD FOR REAL</p>
+  <h2>从十分钟开始，看看中文能把程序说得多自然</h2>
+  <p>不用先懂编译器，也不用背一堆英文。从第一段能运行的程序开始。</p>
+  <a href={site.links.quickStart}>立即开始</a><a href="/roadmap/">看看我们做到哪了</a>
+</section>
 </BaseLayout>

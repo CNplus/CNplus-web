@@ -9,7 +9,7 @@ test('首页使用中文并提供完整的主导航', async () => {
   const html = await readPage();
 
   assert.match(html, /<html[^>]+lang="zh-CN"/);
-  assert.match(html, /<title>CNplus — 用中文表达程序<\/title>/);
+  assert.match(html, /<title>CNplus — 让中文成为编程的第一语言<\/title>/);
 
   const expectedLinks = [
     ['首页', '/'],
@@ -29,8 +29,9 @@ test('完整页面提供可核对的 CNplus 内容', async () => {
   const pages = ['download/index.html', 'learn/index.html', 'community/index.html', 'roadmap/index.html', 'about/index.html', '404.html'];
   for (const page of pages) assert.ok((await readPage(page)).includes('<main'));
   const home = await readPage();
+  const homeText = home.replace(/<[^>]+>/g, '');
   for (const fact of ['CNplus v0.7.2', 'Python 3.11+', 'Apache-2.0', 'lexer', 'parser', 'AST', '可插拔后端', 'Python 转译后端']) assert.ok(home.includes(fact), `缺少事实：${fact}`);
-  for (const line of ['设 单价 = 15', '设 数量 = 4', '打印("总价：" + 文本(单价 * 数量) + " 元")']) assert.ok(home.includes(line), `缺少示例：${line}`);
+  for (const line of ['设 单价 = 15', '设 数量 = 4', '打印("总价：" + 文本(单价 * 数量) + " 元")']) assert.ok(homeText.includes(line), `缺少示例：${line}`);
   const roadmap = await readPage('roadmap/index.html');
   for (const fact of ['VM', 'JS', '2021', '2026']) assert.ok(roadmap.includes(fact), `路线页缺少：${fact}`);
 });
@@ -56,11 +57,13 @@ test('共享外壳具备 SEO、无障碍与无框架移动导航', async () => {
 test('首屏中文标题保持平衡，主操作不会拉成整栏', async () => {
   const html = await readPage();
   const inlineCss = html.match(/<style>([\s\S]+?)<\/style>/);
-  assert.ok(inlineCss, '首页应内联关键样式');
-  assert.ok(inlineCss[1].includes('text-wrap:balance'));
-  assert.ok(inlineCss[1].includes('white-space:nowrap'));
-  assert.ok(inlineCss[1].includes('white-space:normal'));
-  assert.ok(inlineCss[1].includes('width:fit-content'));
+  const linkedCss = html.match(/href="\/_astro\/([^"]+\.css)"/);
+  assert.ok(inlineCss || linkedCss, '构建产物应包含页面样式');
+  const css = inlineCss ? inlineCss[1] : await readPage(`_astro/${linkedCss[1]}`);
+  assert.ok(css.includes('text-wrap:balance'));
+  assert.ok(css.includes('white-space:nowrap'));
+  assert.ok(css.includes('white-space:normal'));
+  assert.ok(css.includes('width:fit-content'));
 });
 
 test('使用官方标志，同时保留小尺寸专用 favicon', async () => {
@@ -68,4 +71,28 @@ test('使用官方标志，同时保留小尺寸专用 favicon', async () => {
   assert.match(html, /<img[^>]+src="\/cnplus-logo-96\.jpg"[^>]+width="48"[^>]+height="48"/);
   assert.match(html, /<meta[^>]+property="og:image"[^>]+content="https:\/\/cnplus\.org\/cnplus-logo-640\.jpg"/);
   assert.match(html, /<link[^>]+href="\/favicon\.svg"/);
+});
+
+test('新版首屏以品牌和真实价值为中心', async () => {
+  const html = await readPage();
+  for (const marker of [
+    'class="hero-v2"',
+    '让中文，成为编程的第一语言',
+    '十分钟写出第一个程序',
+    '错误信息会说人话',
+    '借用 Python 生态',
+    '顺着中文的习惯写',
+  ]) assert.ok(html.includes(marker), `新版首页缺少：${marker}`);
+  assert.match(html, /<img[^>]+class="hero-logo"[^>]+width="176"[^>]+height="176"/);
+  assert.ok(html.includes('href="#why-cnplus"'));
+});
+
+test('居中首屏在移动端不会按内容宽度撑破视口', async () => {
+  const html = await readPage();
+  const linkedCss = html.match(/href="\/_astro\/([^"]+\.css)"/);
+  assert.ok(linkedCss, '新版页面应输出样式文件');
+  const css = await readPage(`_astro/${linkedCss[1]}`);
+  assert.match(css, /main>section\.hero-v2 h1\{[^}]*width:100%/);
+  assert.match(css, /\.hero-lead\{[^}]*width:min\(760px,100%\)/);
+  assert.ok(css.includes('overflow-x:clip'));
 });
