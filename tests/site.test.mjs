@@ -97,3 +97,11 @@ test('居中首屏在移动端不会按内容宽度撑破视口', async () => {
   assert.match(css, /\.hero-lead\{[^}]*width:min\(760px,100%\)/);
   assert.ok(css.includes('overflow-x:clip'));
 });
+
+test('Pages 安全响应头不把 HSTS 扩散到其他子域', async () => {
+  const headers = await readPage('_headers');
+  assert.ok(headers.includes('Strict-Transport-Security: max-age=15552000'));
+  assert.ok(!headers.includes('includeSubDomains'));
+  assert.ok(headers.includes('X-Content-Type-Options: nosniff'));
+  assert.ok(headers.includes('X-Frame-Options: DENY'));
+});
