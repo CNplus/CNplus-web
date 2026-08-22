@@ -69,7 +69,7 @@ main > section.hero-v2 {
   flex-direction: column;
   align-items: center;
   min-height: auto;
-  padding: 60px 0 80px;
+  padding: 84px 0 80px;
   overflow: hidden;
   text-align: center;
   border-bottom: 1px solid var(--line);
@@ -102,42 +102,6 @@ main > section.hero-v2 {
   border: 1px solid rgba(22, 163, 106, 0.2);
   transform: rotate(12deg);
   box-shadow: 22px -22px 0 -21px rgba(22, 163, 106, 0.38);
-}
-
-.hero-logo-wrap {
-  position: relative;
-  margin-bottom: 14px;
-}
-
-.hero-logo-wrap::before,
-.hero-logo-wrap::after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-}
-
-.hero-logo-wrap::before {
-  inset: -14px;
-  z-index: -1;
-  border: 1px solid rgba(21, 94, 239, 0.14);
-}
-
-.hero-logo-wrap::after {
-  right: -22px;
-  bottom: 4px;
-  width: 16px;
-  height: 16px;
-  background: var(--jade);
-  box-shadow: -186px -112px 0 -3px var(--blue);
-}
-
-.hero-logo {
-  display: block;
-  width: 176px;
-  height: 176px;
-  border-radius: 30px;
-  object-fit: cover;
-  box-shadow: 0 18px 46px rgba(16, 24, 40, 0.13), 0 0 0 1px rgba(16, 24, 40, 0.06);
 }
 
 .hero-wordmark {
@@ -523,16 +487,6 @@ main .final-cta a:first-of-type {
     padding: 42px 0 58px;
   }
 
-  .hero-logo {
-    width: 136px;
-    height: 136px;
-    border-radius: 24px;
-  }
-
-  .hero-logo-wrap::after {
-    right: -15px;
-    box-shadow: -144px -86px 0 -4px var(--blue);
-  }
 
   main > section.hero-v2 h1 {
     margin-top: 14px;

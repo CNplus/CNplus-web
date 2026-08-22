@@ -83,7 +83,7 @@ test('新版首屏以品牌和真实价值为中心', async () => {
     '借用 Python 生态',
     '顺着中文的习惯写',
   ]) assert.ok(html.includes(marker), `新版首页缺少：${marker}`);
-  assert.match(html, /<img[^>]+class="hero-logo"[^>]+width="176"[^>]+height="176"/);
+  assert.doesNotMatch(html, /class="hero-logo"/);
   assert.ok(html.includes('href="#why-cnplus"'));
 });
 
