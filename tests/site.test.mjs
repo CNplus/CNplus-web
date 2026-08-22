@@ -75,6 +75,7 @@ test('使用官方标志，同时保留小尺寸专用 favicon', async () => {
 
 test('新版首屏以品牌和真实价值为中心', async () => {
   const html = await readPage();
+  assert.ok(!html.includes('CNplus · 中文编程语言'));
   for (const marker of [
     'class="hero-v2"',
     '让中文，成为编程的第一语言',

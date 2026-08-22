@@ -104,20 +104,10 @@ main > section.hero-v2 {
   box-shadow: 22px -22px 0 -21px rgba(22, 163, 106, 0.38);
 }
 
-.hero-wordmark {
-  margin: 0;
-  color: var(--blue);
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
 main > section.hero-v2 h1 {
   width: 100%;
   max-width: 950px;
-  margin: 16px auto 22px;
+  margin: 0 auto 22px;
   color: #101828;
   font-family: "Songti SC", "STSong", "Noto Serif CJK SC", serif;
   font-size: clamp(3.25rem, 6.7vw, 6.5rem);
