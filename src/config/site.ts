@@ -1,7 +1,7 @@
 export const site = {
   name: 'CNplus',
   url: 'https://cnplus.org',
-  version: '0.9.0',
+  version: '0.9.1',
   links: {
     home: '/',
     download: '/download',
