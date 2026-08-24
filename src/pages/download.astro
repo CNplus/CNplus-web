@@ -1,4 +1,28 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'; import { site } from '../config/site';
 ---
-<BaseLayout title="下载 CNplus"><h1>下载与开始</h1><p>当前版本 CNplus v{site.version}，需要 Python 3.11+。</p><p>请从项目 GitHub 获取源码，并按 Wiki 的快速开始操作。</p><a href={site.links.github}>前往 GitHub</a><a href={site.links.quickStart}>阅读快速开始</a></BaseLayout>
+<BaseLayout title="下载与安装 CNplus" description="下载安装 CNplus 语言与 VSCode 扩展。需要 Python 3.11 或更新版本。">
+<h1>下载 CNplus</h1>
+<p>当前稳定版本 <strong>v{site.version}</strong>，需要 Python 3.11 或更新的版本。分两步装：先装 CNplus 本体，再装 VSCode 扩展。</p>
+
+<h2>第 1 步：安装 CNplus 本体</h2>
+<p>CNplus 尚未发布到 PyPI，目前从源码安装。打开终端（macOS 是「终端」，Windows 是「命令提示符」或「PowerShell」），粘贴下面几行：</p>
+<pre><code>git clone https://github.com/CNplus/CNplus-lang.git
+cd CNplus-lang
+pip3 install -e ".[lsp]"</code></pre>
+<p>装好后，在终端里输入下面这行，看到版本号就说明装好了：</p>
+<pre><code>cnp 版本</code></pre>
+
+<h2>第 2 步：安装 VSCode 扩展</h2>
+<p>扩展提供语法高亮、实时错误提示和一键运行。先下载安装包，再用下面任一方式装上：</p>
+<a href={site.links.vsix}>下载 VSCode 扩展（.vsix）</a>
+<a href={site.links.releases}>查看全部历史版本</a>
+<p><strong>方式一 · 命令行</strong>（在下载目录执行）：</p>
+<pre><code>code --install-extension cnplus-{site.version}.vsix</code></pre>
+<p><strong>方式二 · 图形界面</strong>：在 VSCode 里按 <code>⌘⇧X</code>（Windows/Linux 是 <code>Ctrl+Shift+X</code>）打开扩展面板，点右上角 <code>…</code> → 「从 VSIX 安装…」，选中下载的 <code>.vsix</code> 文件。</p>
+<p>装完<b>完全退出 VSCode 再打开</b>（不是关窗口，是彻底退出程序），扩展才会生效。</p>
+
+<h2>装好了，然后呢？</h2>
+<p>用 VSCode 新建一个文件，保存成 <code>xxx.cnp</code>，就能看到中文关键字高亮了。按 <code>F5</code> 或点右上角 ▶ 即可运行。</p>
+<a href={site.links.quickStart}>开始写第一个程序</a>
+</BaseLayout>
