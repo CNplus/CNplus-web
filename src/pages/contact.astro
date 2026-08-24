@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'; import { site } from '../config/site';
+---
+<BaseLayout title="联系我们" description="通过社区论坛、电子邮件或 GitHub Issue 与 CNplus 开发组取得联系。">
+  <article class="doc-page">
+    <h1>联系我们</h1>
+    <p class="doc-lead">CNplus 开发组通过以下渠道接收反馈与咨询，欢迎按需选用。</p>
+    <h2>社区论坛</h2>
+    <p>语言使用中的问题与讨论，请在社区论坛发帖，开发组与社区成员将及时答复。</p>
+    <p class="forum-links"><a href={site.links.forumHelp}>新手求助</a><a href={site.links.forumFeedback}>问题反馈</a></p>
+    <h2>电子邮件</h2>
+    <p>如需与开发组直接沟通，请发送邮件至 <a href={`mailto:${site.links.contact}`}>{site.links.contact}</a>。</p>
+    <h2>GitHub</h2>
+    <p>与源码相关的缺陷报告与功能建议，可通过 <a href={site.links.github}>GitHub Issue</a> 提交。</p>
+  </article>
+</BaseLayout>

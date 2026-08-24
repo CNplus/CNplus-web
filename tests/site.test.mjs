@@ -98,6 +98,29 @@ test('居中首屏在移动端不会按内容宽度撑破视口', async () => {
   assert.ok(css.includes('overflow-x:clip'));
 });
 
+test('联系我们页提供论坛、邮箱和 Issue 三个渠道', async () => {
+  const html = await readPage('contact/index.html');
+  assert.match(html, /<html[^>]+lang="zh-CN"/);
+  assert.match(html, /<h1>联系我们<\/h1>/);
+  assert.ok(html.includes('contact@cnplus.org'));
+  assert.ok(html.includes('https://forum.cnplus.org/category/5'));
+  assert.ok(html.includes('https://forum.cnplus.org/category/10'));
+  assert.ok(html.includes('https://github.com/CNplus/CNplus-lang'));
+  assert.ok(html.includes('class="doc-page"'));
+  assert.ok(html.includes('class="forum-links"'), '论坛板块应为并排按钮组');
+  assert.ok(!html.includes('contact-list'), '不应再使用卡片按钮布局');
+});
+
+test('页脚导航包含联系入口', async () => {
+  const html = await readPage('index.html');
+  assert.match(html, /<a href="\/contact\/">联系<\/a>/);
+});
+
+test('联系我们页在 sitemap 中', async () => {
+  const xml = await readFile(new URL('../public/sitemap.xml', import.meta.url), 'utf8');
+  assert.ok(xml.includes('https://cnplus.org/contact/'));
+});
+
 test('Pages 安全响应头不把 HSTS 扩散到其他子域', async () => {
   const headers = await readPage('_headers');
   assert.ok(headers.includes('Strict-Transport-Security: max-age=15552000'));

@@ -530,3 +530,80 @@ main .final-cta a:first-of-type {
     transition: none;
   }
 }
+
+/* 联系我们页：文档式排版 */
+.doc-page {
+  max-width: 720px;
+}
+
+.doc-page h1 {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+}
+
+.doc-page .doc-lead {
+  font-size: 1.08rem;
+  color: var(--muted);
+}
+
+.doc-page h2 {
+  margin: 52px 0 12px;
+  padding-top: 34px;
+  border-top: 1px solid var(--line);
+  font-size: 1.4rem;
+  letter-spacing: 0.01em;
+}
+
+.doc-page p {
+  margin: 10px 0 0;
+}
+
+.doc-page ul {
+  margin: 12px 0 0;
+  padding-left: 1.4em;
+}
+
+.doc-page .forum-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+main .doc-page .forum-links a:link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 26px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+main .doc-page .forum-links a:link:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+  box-shadow: 0 1px 6px rgba(21, 94, 239, 0.12);
+}
+
+main .doc-page a:link {
+  display: inline;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: none;
+  color: var(--blue);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.22em;
+}
+
+main .doc-page a:link:hover {
+  color: var(--blue-deep);
+}

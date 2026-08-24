@@ -12,6 +12,9 @@ export const site = {
     github: 'https://github.com/CNplus/CNplus-lang',
     releases: 'https://github.com/CNplus/CNplus-lang/releases',
     vsix: 'https://github.com/CNplus/CNplus-lang/releases/download/v0.8.0/cnplus-0.8.0.vsix',
+    contact: 'contact@cnplus.org',
+    forumHelp: 'https://forum.cnplus.org/category/5',
+    forumFeedback: 'https://forum.cnplus.org/category/10',
   },
 } as const;
 
