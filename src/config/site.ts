@@ -5,7 +5,7 @@ export const site = {
   links: {
     home: '/',
     download: '/download',
-    quickStart: 'https://wiki.cnplus.org/快速开始',
+    quickStart: 'https://wiki.cnplus.org/教程/00-开始',
     wiki: 'https://wiki.cnplus.org/',
     forum: 'https://forum.cnplus.org/',
     news: 'https://forum.cnplus.org/category/2',

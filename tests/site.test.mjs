@@ -135,9 +135,15 @@ test('vsix 直链与当前稳定版本一致', async () => {
   assert.ok(!sitemap.includes('cnplus.org/download/'), 'sitemap 不应再含下载页');
 });
 
-test('删除的下载页永久重定向到 Wiki 快速开始', async () => {
+test('删除的下载页永久重定向到 Wiki 教程开始篇', async () => {
   const redirects = await readPage('_redirects');
-  assert.ok(redirects.includes('/download/ https://wiki.cnplus.org/快速开始 301'), '应有 /download/ 301 规则');
+  assert.ok(redirects.includes('/download/ https://wiki.cnplus.org/教程/00-开始 301'), '应有 /download/ 301 到新教程路径');
+  assert.ok(!redirects.includes('快速开始'), '重定向不应再指向已失效的快速开始');
+});
+
+test('quickStart 外链指向 wiki 教程开始篇', async () => {
+  const { site } = await import('../src/config/site.ts');
+  assert.equal(site.links.quickStart, 'https://wiki.cnplus.org/教程/00-开始');
 });
 
 test('Pages 安全响应头不把 HSTS 扩散到其他子域', async () => {
