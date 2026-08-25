@@ -43,12 +43,17 @@ const 示例代码 = `# 改改看，点「运行」
         <button id="run" class="btn primary">▶ 运行</button>
         <button id="share" class="btn">复制分享链接</button>
         <button id="reset" class="btn">重置示例</button>
-        <span id="status" class="status">首次运行需加载运行环境（约 10 秒，之后有缓存）</span>
+        <span id="status" class="status"></span>
       </div>
-      <div class="panes">
+      <div class="panes" id="panes">
         <textarea id="code" spellcheck="false" autocomplete="off"
           aria-label="CNplus 代码编辑区" data-default-code={示例代码}></textarea>
         <pre id="output" aria-label="运行输出"><span class="hint">输出会出现在这里</span></pre>
+      </div>
+      <div id="loader" class="loader" hidden>
+        <div class="load-title">正在加载运行环境…</div>
+        <div class="load-bar"><div class="load-fill"></div></div>
+        <p class="load-note" id="load-note">首次约 10 秒，之后有缓存</p>
       </div>
     </div>
   </main>
@@ -57,6 +62,9 @@ const 示例代码 = `# 改改看，点「运行」
     (function () {
       const 代码框 = document.getElementById('code');
       const 输出框 = document.getElementById('output');
+      const 面板区 = document.getElementById('panes');
+      const 加载区 = document.getElementById('loader');
+      const 加载提示 = document.getElementById('load-note');
       const 运行钮 = document.getElementById('run');
       const 分享钮 = document.getElementById('share');
       const 重置钮 = document.getElementById('reset');
@@ -79,23 +87,60 @@ const 示例代码 = `# 改改看，点「运行」
       });
       重置钮.addEventListener('click', () => { 代码框.value = 默认代码; });
 
+      // 打字机输出：逐段浮现；减少动画偏好或极短输出时直接整显
+      let 输出代 = 0;
+      async function 打字输出(文本) {
+        const 代 = ++输出代;
+        const 字符 = [...文本];
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || 字符.length <= 12) {
+          if (代 === 输出代) 输出框.textContent = 文本;
+          return;
+        }
+        输出框.textContent = '';
+        const 步长 = Math.max(2, Math.ceil(字符.length / 70));
+        for (let i = 0; i < 字符.length; i += 步长) {
+          if (代 !== 输出代) return;
+          输出框.textContent += 字符.slice(i, i + 步长).join('');
+          输出框.scrollTop = 输出框.scrollHeight;
+          await new Promise(r => setTimeout(r, 16));
+        }
+      }
+
+      function 追加完成标记() {
+        const 标记 = document.createElement('span');
+        标记.className = 'run-done';
+        标记.textContent = '—— 运行完成 ✓';
+        输出框.appendChild(标记);
+      }
+
       async function 运行() {
         运行钮.disabled = true;
+        运行钮.classList.add('is-running');
+        const 首次 = !window._cnplusPy;
+        if (首次) {
+          面板区.hidden = true;
+          加载区.hidden = false;
+        }
         输出框.textContent = '';
+        输出框.classList.remove('is-fresh');
         try {
           if (!window._cnplusPy) {
             if (!window.loadPyodide) throw new Error('运行环境脚本未加载，请检查网络后刷新');
-            状态.textContent = '加载运行环境…（首次约 10 秒，之后有缓存）';
+            加载提示.textContent = '正在加载 Python 运行环境…';
             const py = await window.loadPyodide();
             await py.loadPackage('micropip');
-            状态.textContent = '安装 CNplus…';
+            加载提示.textContent = '正在安装 CNplus 运行时…';
             await py.runPythonAsync(
               'import micropip; await micropip.install("/pyodide/cnplus-1.0.0-py3-none-any.whl")');
             window._cnplusPy = py;
           }
+          if (首次) {
+            面板区.hidden = false;
+            加载区.hidden = true;
+          }
           const py = window._cnplusPy;
           py.globals.set('_cnp_code', 代码框.value);
-          状态.textContent = '运行中…';
+          输出框.textContent = '运行中…';
           const 结果 = py.runPython(`
 from cnplus.source import 源文件
 from cnplus.parser.parser import 解析
@@ -118,13 +163,19 @@ else:
             _文本 = _袋.渲染全部(_源) + _文本
 _文本
 `);
-          输出框.textContent = 结果 || '（没有输出）';
-          状态.textContent = '完成 ✓';
+          输出框.classList.add('is-fresh');
+          await 打字输出(结果 || '（没有输出）');
+          追加完成标记();
         } catch (e) {
-          输出框.textContent = '出错了：' + e.message;
-          状态.textContent = '';
+          if (首次) {
+            面板区.hidden = false;
+            加载区.hidden = true;
+          }
+          输出框.classList.add('is-fresh');
+          await 打字输出('出错了：' + e.message);
         } finally {
           运行钮.disabled = false;
+          运行钮.classList.remove('is-running');
         }
       }
       运行钮.addEventListener('click', 运行);

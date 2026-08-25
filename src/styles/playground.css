@@ -1,17 +1,217 @@
-/* 在线运行器（playground）—— T11 */
-.playground .hero{padding-block:0 40px}
-.playground .hero h1{font-size:clamp(2rem,4vw,3.4rem);margin:.2em 0}
-.playground .hero p{margin:.2em 0 0}
-.editor-wrap{display:grid;gap:16px}
-.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.toolbar .btn{min-height:44px;padding:0 20px;border-radius:8px;border:1px solid var(--ink);background:var(--surface);color:var(--ink);font-weight:700;cursor:pointer;font-size:1rem}
-.toolbar .btn.primary{background:var(--red);border-color:var(--red);color:#fff}
-.toolbar .btn:disabled{opacity:.55;cursor:wait}
-.toolbar .status{color:var(--muted);font-size:.92rem}
-.panes{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.panes textarea,.panes pre{margin:0;min-height:460px;border-radius:8px;padding:22px;line-height:2;font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;font-size:.95rem}
-.panes textarea{border:1px solid var(--line);background:var(--surface);color:var(--ink);resize:vertical;tab-size:4;white-space:pre;overflow-wrap:normal;overflow:auto}
-.panes textarea:focus-visible{outline:3px solid var(--red);outline-offset:2px}
-.panes pre{background:var(--ink);color:#f7f6f2;overflow:auto;white-space:pre-wrap;word-break:break-all}
-.panes pre .hint{opacity:.5}
-@media(max-width:900px){.panes{grid-template-columns:1fr}.panes textarea,.panes pre{min-height:300px}}
+/* 在线运行器（playground）—— T11 + 交互升级 */
+
+.playground {
+  --play-w: min(1520px, 100%);
+  width: var(--play-w);
+}
+
+/* 标题与工具栏紧凑衔接 */
+.playground .hero {
+  padding-block: 24px;
+  border-bottom: none;
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.playground .hero h1 {
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
+  margin: .2em 0;
+  white-space: nowrap;
+}
+.playground .hero p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.editor-wrap {
+  display: grid;
+  gap: 14px;
+}
+
+/* 工具栏：按钮更大更醒目 */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.toolbar .btn {
+  min-height: 52px;
+  padding: 0 28px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 1.02rem;
+  transition: transform .12s ease, box-shadow .2s ease, border-color .2s ease, background-color .2s ease;
+}
+.toolbar .btn:hover {
+  border-color: var(--blue);
+  box-shadow: 0 2px 10px rgba(21, 94, 239, .14);
+}
+/* 按下反馈：轻微下沉 */
+.toolbar .btn:active {
+  transform: translateY(1px) scale(.98);
+}
+.toolbar .btn.primary {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+.toolbar .btn.primary:hover {
+  background: var(--blue-deep);
+  border-color: var(--blue-deep);
+}
+.toolbar .btn:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
+/* 运行中：主按钮呼吸光晕 */
+.toolbar .btn.primary.is-running {
+  animation: run-pulse 1.6s ease-in-out infinite;
+}
+@keyframes run-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(21, 94, 239, .38); }
+  50%      { box-shadow: 0 0 0 9px rgba(21, 94, 239, 0); }
+}
+
+/* 状态条：仅用于分享复制等非运行提示 */
+.toolbar .status {
+  color: var(--muted);
+  font-size: .95rem;
+}
+
+/* 加载占位区：首次加载时替换编辑器面板 */
+.loader {
+  min-height: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.loader[hidden] {
+  display: none;
+}
+.load-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.load-bar {
+  width: min(520px, 80%);
+  height: 8px;
+  border-radius: 999px;
+  background: var(--blue-soft);
+  overflow: hidden;
+}
+.load-fill {
+  width: 38%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--blue), var(--jade));
+  animation: load-slide 1.2s ease-in-out infinite;
+}
+@keyframes load-slide {
+  0%   { transform: translateX(-110%); }
+  100% { transform: translateX(280%); }
+}
+.load-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: .95rem;
+}
+
+/* 编辑区：更大画布 */
+.panes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.panes[hidden] {
+  display: none;
+}
+.panes textarea,
+.panes pre {
+  margin: 0;
+  min-height: 560px;
+  border-radius: 10px;
+  padding: 24px;
+  line-height: 2;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: .97rem;
+}
+.panes textarea {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  resize: vertical;
+  tab-size: 4;
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow: auto;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.panes textarea:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px rgba(21, 94, 239, .12);
+}
+.panes pre {
+  background: var(--ink);
+  color: #f7f6f2;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.panes pre .hint {
+  opacity: .5;
+}
+
+/* 输出刷新：短暂闪烁高亮 */
+.panes pre.is-fresh {
+  animation: output-flash .9s ease-out;
+}
+@keyframes output-flash {
+  0%   { background: var(--blue-deep); box-shadow: 0 0 24px rgba(21, 94, 239, .35); }
+  100% { background: var(--ink); box-shadow: none; }
+}
+
+/* 运行完成标记：并入输出区 */
+.panes pre .run-done {
+  display: block;
+  margin-top: 14px;
+  color: var(--jade);
+  opacity: .85;
+  font-size: .88rem;
+}
+
+@media (max-width: 900px) {
+  .playground .hero { gap: 6px; }
+  .panes { grid-template-columns: 1fr; }
+  .panes textarea, .panes pre { min-height: 340px; }
+  .toolbar .btn { min-height: 48px; padding: 0 20px; }
+}
+
+/* 尊重减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .toolbar .btn,
+  .toolbar .btn.primary.is-running,
+  .panes pre.is-fresh {
+    animation: none !important;
+    transition: none !important;
+  }
+  .load-fill {
+    animation: none !important;
+    width: 60%;
+    transform: none;
+  }
+}
