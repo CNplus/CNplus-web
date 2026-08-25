@@ -11,18 +11,22 @@ test('首页使用中文并提供完整的主导航', async () => {
   assert.match(html, /<html[^>]+lang="zh-CN"/);
   assert.match(html, /<title>CNplus — 让中文成为编程的第一语言<\/title>/);
 
+  const nav = html.match(/<nav id="primary-nav"[^>]*>([\s\S]*?)<\/nav>/)?.[1] ?? '';
   const expectedLinks = [
     ['首页', '/'],
-    ['快速开始', 'https://wiki.cnplus.org/快速开始'],
+    ['在线运行', '/playground'],
+    ['下载', '/download'],
     ['Wiki', 'https://wiki.cnplus.org/'],
     ['论坛', 'https://forum.cnplus.org/'],
     ['动态', 'https://forum.cnplus.org/category/2'],
     ['GitHub', 'https://github.com/CNplus/CNplus-lang'],
+    ['联系', '/contact/'],
   ];
 
   for (const [label, href] of expectedLinks) {
-    assert.match(html, new RegExp(`<a[^>]+href="${href.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"[^>]*>[^<]*${label}`));
+    assert.match(nav, new RegExp(`<a[^>]+href="${href.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"[^>]*>[^<]*${label}`));
   }
+  assert.ok(!nav.includes('快速开始'), '主导航不应再含快速开始');
 });
 
 test('完整页面提供可核对的 CNplus 内容', async () => {
