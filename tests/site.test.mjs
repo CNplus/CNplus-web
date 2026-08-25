@@ -121,6 +121,14 @@ test('联系我们页在 sitemap 中', async () => {
   assert.ok(xml.includes('https://cnplus.org/contact/'));
 });
 
+test('vsix 直链与当前稳定版本一致', async () => {
+  const { site } = await import('../src/config/site.ts');
+  assert.ok(site.links.vsix.includes(`v${site.version}`), `vsix 链接应指向 v${site.version}：${site.links.vsix}`);
+  assert.ok(site.links.vsix.includes(`cnplus-${site.version}.vsix`), 'vsix 文件名应与版本一致');
+  const download = await readPage('download/index.html');
+  assert.ok(download.includes(site.links.vsix), '下载页应使用 site.ts 中的 vsix 直链');
+});
+
 test('Pages 安全响应头不把 HSTS 扩散到其他子域', async () => {
   const headers = await readPage('_headers');
   assert.ok(headers.includes('Strict-Transport-Security: max-age=15552000'));

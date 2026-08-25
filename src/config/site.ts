@@ -11,7 +11,7 @@ export const site = {
     news: 'https://forum.cnplus.org/category/2',
     github: 'https://github.com/CNplus/CNplus-lang',
     releases: 'https://github.com/CNplus/CNplus-lang/releases',
-    vsix: 'https://github.com/CNplus/CNplus-lang/releases/download/v0.9.0/cnplus-0.9.0.vsix',
+    vsix: 'https://github.com/CNplus/CNplus-lang/releases/download/v1.0.0/cnplus-1.0.0.vsix',
     contact: 'contact@cnplus.org',
     forumHelp: 'https://forum.cnplus.org/category/5',
     forumFeedback: 'https://forum.cnplus.org/category/10',
