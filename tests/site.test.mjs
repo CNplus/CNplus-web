@@ -35,7 +35,7 @@ test('完整页面提供可核对的 CNplus 内容', async () => {
   await assert.rejects(readPage('download/index.html'), { code: 'ENOENT' }, '下载页已删除');
   const home = await readPage();
   const homeText = home.replace(/<[^>]+>/g, '');
-  for (const fact of ['CNplus v1.0.1', 'Python 3.11+', 'Apache-2.0', 'lexer', 'parser', 'AST', '可插拔后端', 'Python 转译后端']) assert.ok(home.includes(fact), `缺少事实：${fact}`);
+  for (const fact of ['CNplus v1.1.0', 'Python 3.11+', 'Apache-2.0', 'lexer', 'parser', 'AST', '可插拔后端', 'Python 转译后端']) assert.ok(home.includes(fact), `缺少事实：${fact}`);
   for (const line of ['设 单价 = 15', '设 数量 = 4', '打印("总价：" + 文本(单价 * 数量) + " 元")']) assert.ok(homeText.includes(line), `缺少示例：${line}`);
   const roadmap = await readPage('roadmap/index.html');
   for (const fact of ['VM', 'JS', '2021', '2026']) assert.ok(roadmap.includes(fact), `路线页缺少：${fact}`);
