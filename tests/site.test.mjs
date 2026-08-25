@@ -135,6 +135,11 @@ test('vsix 直链与当前稳定版本一致', async () => {
   assert.ok(!sitemap.includes('cnplus.org/download/'), 'sitemap 不应再含下载页');
 });
 
+test('删除的下载页永久重定向到 Wiki 快速开始', async () => {
+  const redirects = await readPage('_redirects');
+  assert.ok(redirects.includes('/download/ https://wiki.cnplus.org/快速开始 301'), '应有 /download/ 301 规则');
+});
+
 test('Pages 安全响应头不把 HSTS 扩散到其他子域', async () => {
   const headers = await readPage('_headers');
   assert.ok(headers.includes('Strict-Transport-Security: max-age=15552000'));
