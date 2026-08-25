@@ -17,7 +17,7 @@ test('playground 默认示例包含类语法', async () => {
 });
 
 test('cnplus wheel 已就位', async () => {
-  const buf = await readFile('dist/pyodide/cnplus-1.0.0a3-py3-none-any.whl');
+  const buf = await readFile('dist/pyodide/cnplus-1.0.0-py3-none-any.whl');
   assert.ok(buf.length > 50000, `wheel 太小: ${buf.length}`);
 });
 

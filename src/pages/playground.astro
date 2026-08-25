@@ -90,7 +90,7 @@ const 示例代码 = `# 改改看，点「运行」
             await py.loadPackage('micropip');
             状态.textContent = '安装 CNplus…';
             await py.runPythonAsync(
-              'import micropip; await micropip.install("/pyodide/cnplus-1.0.0a3-py3-none-any.whl")');
+              'import micropip; await micropip.install("/pyodide/cnplus-1.0.0-py3-none-any.whl")');
             window._cnplusPy = py;
           }
           const py = window._cnplusPy;
