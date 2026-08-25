@@ -15,23 +15,24 @@ test('首页使用中文并提供完整的主导航', async () => {
   const expectedLinks = [
     ['首页', '/'],
     ['在线运行', '/playground'],
-    ['下载', '/download'],
     ['Wiki', 'https://wiki.cnplus.org/'],
     ['论坛', 'https://forum.cnplus.org/'],
     ['动态', 'https://forum.cnplus.org/category/2'],
     ['GitHub', 'https://github.com/CNplus/CNplus-lang'],
-    ['联系', '/contact/'],
   ];
 
   for (const [label, href] of expectedLinks) {
     assert.match(nav, new RegExp(`<a[^>]+href="${href.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"[^>]*>[^<]*${label}`));
   }
-  assert.ok(!nav.includes('快速开始'), '主导航不应再含快速开始');
+  assert.ok(!nav.includes('快速开始'), '主导航不应含快速开始');
+  assert.ok(!nav.includes('下载'), '主导航不应含下载（下载页已删除）');
+  assert.ok(!nav.includes('联系'), '主导航不应含联系');
 });
 
 test('完整页面提供可核对的 CNplus 内容', async () => {
-  const pages = ['download/index.html', 'learn/index.html', 'community/index.html', 'roadmap/index.html', 'about/index.html', '404.html'];
+  const pages = ['learn/index.html', 'community/index.html', 'roadmap/index.html', 'about/index.html', '404.html'];
   for (const page of pages) assert.ok((await readPage(page)).includes('<main'));
+  await assert.rejects(readPage('download/index.html'), { code: 'ENOENT' }, '下载页已删除');
   const home = await readPage();
   const homeText = home.replace(/<[^>]+>/g, '');
   for (const fact of ['CNplus v1.0.0', 'Python 3.11+', 'Apache-2.0', 'lexer', 'parser', 'AST', '可插拔后端', 'Python 转译后端']) assert.ok(home.includes(fact), `缺少事实：${fact}`);
@@ -54,7 +55,7 @@ test('共享外壳具备 SEO、无障碍与无框架移动导航', async () => {
   assert.ok(css.includes('min-height:44px'));
   assert.ok(css.includes(':focus-visible'));
   const sitemap = await readPage('sitemap.xml');
-  for (const route of ['download', 'learn', 'community', 'roadmap', 'about']) assert.ok(sitemap.includes(`https://cnplus.org/${route}/`));
+  for (const route of ['learn', 'community', 'roadmap', 'about', 'contact']) assert.ok(sitemap.includes(`https://cnplus.org/${route}/`));
   assert.ok((await readPage('robots.txt')).includes('Sitemap: https://cnplus.org/sitemap.xml'));
 });
 
@@ -118,6 +119,7 @@ test('联系我们页提供论坛、邮箱和 Issue 三个渠道', async () => {
 test('页脚导航包含联系入口', async () => {
   const html = await readPage('index.html');
   assert.match(html, /<a href="\/contact\/">联系<\/a>/);
+  assert.ok(!html.includes('<a href="/download/">下载</a>'), '页脚不应再含下载入口');
 });
 
 test('联系我们页在 sitemap 中', async () => {
@@ -129,8 +131,8 @@ test('vsix 直链与当前稳定版本一致', async () => {
   const { site } = await import('../src/config/site.ts');
   assert.ok(site.links.vsix.includes(`v${site.version}`), `vsix 链接应指向 v${site.version}：${site.links.vsix}`);
   assert.ok(site.links.vsix.includes(`cnplus-${site.version}.vsix`), 'vsix 文件名应与版本一致');
-  const download = await readPage('download/index.html');
-  assert.ok(download.includes(site.links.vsix), '下载页应使用 site.ts 中的 vsix 直链');
+  const sitemap = await readPage('sitemap.xml');
+  assert.ok(!sitemap.includes('cnplus.org/download/'), 'sitemap 不应再含下载页');
 });
 
 test('Pages 安全响应头不把 HSTS 扩散到其他子域', async () => {
