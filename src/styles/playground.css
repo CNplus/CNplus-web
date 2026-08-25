@@ -1,0 +1,17 @@
+/* 在线运行器（playground）—— T11 */
+.playground .hero{padding-block:0 40px}
+.playground .hero h1{font-size:clamp(2rem,4vw,3.4rem);margin:.2em 0}
+.playground .hero p{margin:.2em 0 0}
+.editor-wrap{display:grid;gap:16px}
+.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.toolbar .btn{min-height:44px;padding:0 20px;border-radius:8px;border:1px solid var(--ink);background:var(--surface);color:var(--ink);font-weight:700;cursor:pointer;font-size:1rem}
+.toolbar .btn.primary{background:var(--red);border-color:var(--red);color:#fff}
+.toolbar .btn:disabled{opacity:.55;cursor:wait}
+.toolbar .status{color:var(--muted);font-size:.92rem}
+.panes{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.panes textarea,.panes pre{margin:0;min-height:460px;border-radius:8px;padding:22px;line-height:2;font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;font-size:.95rem}
+.panes textarea{border:1px solid var(--line);background:var(--surface);color:var(--ink);resize:vertical;tab-size:4;white-space:pre;overflow-wrap:normal;overflow:auto}
+.panes textarea:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.panes pre{background:var(--ink);color:#f7f6f2;overflow:auto;white-space:pre-wrap;word-break:break-all}
+.panes pre .hint{opacity:.5}
+@media(max-width:900px){.panes{grid-template-columns:1fr}.panes textarea,.panes pre{min-height:300px}}

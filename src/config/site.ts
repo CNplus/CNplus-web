@@ -19,7 +19,8 @@ export const site = {
 } as const;
 
 export const navigation = [
-  ['首页', site.links.home], ['快速开始', site.links.quickStart],
+  ['首页', site.links.home], ['在线运行', '/playground'],
+  ['快速开始', site.links.quickStart],
   ['Wiki', site.links.wiki], ['论坛', site.links.forum],
   ['动态', site.links.news], ['GitHub', site.links.github],
 ] as const;
