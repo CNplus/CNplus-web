@@ -1,7 +1,7 @@
 export const site = {
   name: 'CNplus',
   url: 'https://cnplus.org',
-  version: '1.3.2',
+  version: '1.3.3',
   links: {
     home: '/',
     download: '/download',
@@ -11,7 +11,7 @@ export const site = {
     news: 'https://forum.cnplus.org/category/2',
     github: 'https://github.com/CNplus/CNplus-lang',
     releases: 'https://github.com/CNplus/CNplus-lang/releases',
-    vsix: 'https://github.com/CNplus/CNplus-lang/releases/download/v1.3.2/cnplus-1.3.2.vsix',
+    vsix: 'https://github.com/CNplus/CNplus-lang/releases/download/v1.3.3/cnplus-1.3.3.vsix',
     contact: 'contact@cnplus.org',
     forumHelp: 'https://forum.cnplus.org/category/5',
     forumFeedback: 'https://forum.cnplus.org/category/10',
