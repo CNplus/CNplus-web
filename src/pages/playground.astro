@@ -3,7 +3,10 @@
 // Pyodide（浏览器里的 Python）加载 cnplus wheel —— 复用同一前端，
 // 零重复实现。纯静态站，无后端服务。
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
 import '../styles/playground.css';
+
+const wheel路径 = `/pyodide/cnplus-${site.version}-py3-none-any.whl`;
 
 const 示例代码 = `# 改改看，点「运行」
 类 学生
@@ -32,7 +35,7 @@ const 示例代码 = `# 改改看，点「运行」
 
 <BaseLayout title="在线运行 | CNplus">
   <script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
-  <main class="playground">
+  <main class="playground" data-wheel={wheel路径}>
     <section class="hero">
       <h1>在线运行 CNplus</h1>
       <p>不装任何东西——改改下面的代码，点「运行」。</p>
@@ -61,6 +64,7 @@ const 示例代码 = `# 改改看，点「运行」
   <script is:inline>
     (function () {
       const 代码框 = document.getElementById('code');
+      const wheel路径 = document.querySelector('.playground').dataset.wheel;
       const 输出框 = document.getElementById('output');
       const 面板区 = document.getElementById('panes');
       const 加载区 = document.getElementById('loader');
@@ -131,7 +135,7 @@ const 示例代码 = `# 改改看，点「运行」
             await py.loadPackage('micropip');
             加载提示.textContent = '正在安装 CNplus 运行时…';
             await py.runPythonAsync(
-              'import micropip; await micropip.install("/pyodide/cnplus-1.0.0-py3-none-any.whl")');
+              `import micropip; await micropip.install(${JSON.stringify(wheel路径)})`);
             window._cnplusPy = py;
           }
           if (首次) {

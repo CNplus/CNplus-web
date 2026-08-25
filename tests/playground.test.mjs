@@ -1,6 +1,17 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+
+const execFileAsync = promisify(execFile);
+
+async function 读取站点版本() {
+  const 配置 = await readFile('src/config/site.ts', 'utf8');
+  const 匹配 = 配置.match(/version:\s*'([^']+)'/);
+  assert.ok(匹配, 'site.ts 必须声明版本号');
+  return 匹配[1];
+}
 
 test('playground 页面已构建', async () => {
   const html = await readFile('dist/playground/index.html', 'utf8');
@@ -16,9 +27,19 @@ test('playground 默认示例包含类语法', async () => {
   assert.ok(html.includes('自己.分数'), '示例代码含自己');
 });
 
-test('cnplus wheel 已就位', async () => {
-  const buf = await readFile('dist/pyodide/cnplus-1.0.0-py3-none-any.whl');
+test('cnplus wheel 与站点版本一致', async () => {
+  const 版本 = await 读取站点版本();
+  const wheel名 = `cnplus-${版本}-py3-none-any.whl`;
+  const wheel路径 = `dist/pyodide/${wheel名}`;
+  const html = await readFile('dist/playground/index.html', 'utf8');
+  const buf = await readFile(wheel路径);
   assert.ok(buf.length > 50000, `wheel 太小: ${buf.length}`);
+  assert.ok(html.includes(`/pyodide/${wheel名}`), 'playground 必须加载当前版本 wheel');
+
+  const { stdout: 元数据 } = await execFileAsync('unzip', [
+    '-p', wheel路径, `cnplus-${版本}.dist-info/METADATA`,
+  ]);
+  assert.match(元数据, new RegExp(`^Version: ${版本}$`, 'm'));
 });
 
 test('导航含在线运行入口', async () => {

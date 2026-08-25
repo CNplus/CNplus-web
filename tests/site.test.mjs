@@ -5,6 +5,13 @@ import test from 'node:test';
 const readPage = async (path = 'index.html') =>
   readFile(new URL(`../dist/${path}`, import.meta.url), 'utf8');
 
+async function 读取站点版本() {
+  const 配置 = await readFile(new URL('../src/config/site.ts', import.meta.url), 'utf8');
+  const 匹配 = 配置.match(/version:\s*'([^']+)'/);
+  assert.ok(匹配, 'site.ts 必须声明版本号');
+  return 匹配[1];
+}
+
 test('首页使用中文并提供完整的主导航', async () => {
   const html = await readPage();
 
@@ -35,7 +42,8 @@ test('完整页面提供可核对的 CNplus 内容', async () => {
   await assert.rejects(readPage('download/index.html'), { code: 'ENOENT' }, '下载页已删除');
   const home = await readPage();
   const homeText = home.replace(/<[^>]+>/g, '');
-  for (const fact of ['CNplus v1.3.0', 'Python 3.11+', 'Apache-2.0', 'lexer', 'parser', 'AST', '可插拔后端', 'Python 转译后端']) assert.ok(home.includes(fact), `缺少事实：${fact}`);
+  const 版本 = await 读取站点版本();
+  for (const fact of [`CNplus v${版本}`, 'Python 3.11+', 'Apache-2.0', 'lexer', 'parser', 'AST', '可插拔后端', 'Python 转译后端']) assert.ok(home.includes(fact), `缺少事实：${fact}`);
   for (const line of ['设 单价 = 15', '设 数量 = 4', '打印("总价：" + 文本(单价 * 数量) + " 元")']) assert.ok(homeText.includes(line), `缺少示例：${line}`);
   const roadmap = await readPage('roadmap/index.html');
   for (const fact of ['VM', 'JS', '2021', '2026']) assert.ok(roadmap.includes(fact), `路线页缺少：${fact}`);
